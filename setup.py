@@ -26,8 +26,8 @@ setup(
         'Programming Language :: Python',
     ],
     entry_points={
-        'console_scripts': [
-            'bugyouctl = bugyou_plugins.bugyouctl:main',
+        'bugyou.plugin': [
+            "autocloud = bugyou_plugins.autocloud:AutocloudPlugin",
         ]
     },
 )
