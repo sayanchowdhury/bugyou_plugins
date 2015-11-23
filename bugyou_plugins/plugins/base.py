@@ -4,7 +4,7 @@ import multiprocessing
 
 from retask import Queue
 
-from bugyou_plugins import load_config
+from bugyou_plugins.utility import get_active_services, load_config
 
 
 class BasePlugin(object):
@@ -13,7 +13,7 @@ class BasePlugin(object):
     def __init__(self, *args, **kwargs):
         filepath = '/etc/bugyou/bugyou_plugins.cfg'
         self.config = load_config(filepath)
-        self.active_services = get_active_services(self)
+        self.active_services = get_active_services()
 
     def initialize(self):
         self.init_retask_connection()
@@ -21,10 +21,10 @@ class BasePlugin(object):
 
     def init_retask_connection(self):
         """ Connect to the retask queue for the plugin """
-        self.queue = Queue(self.queue_name)
+        self.queue = Queue(self.plugin_name)
         conn = self.queue.connect()
         if not conn:
-            log.debug('Could not connect to %s queue' % self.queue_name)
+            log.debug('Could not connect to %s queue' % self.plugin_name)
             return False
 
     def consume(self):
