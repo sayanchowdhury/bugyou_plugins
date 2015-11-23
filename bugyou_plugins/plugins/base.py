@@ -30,6 +30,10 @@ class BasePlugin(object):
         process = multiprocessing.Process(target=self.consume)
         process.start()
 
+    def load_services(self):
+        """ Load the services for the plugin """
+        raise NotImplementedError()
+
     @abc.abstractmethod
     def process(self):
         """ Consumes the messages from retask """
