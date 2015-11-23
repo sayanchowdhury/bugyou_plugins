@@ -4,9 +4,15 @@ import multiprocessing
 
 from retask import Queue
 
+from bugyou_plugins import load_config
+
 
 class BasePlugin(object):
     __metaclass__ = abc.ABCMeta
+
+    def __init__(self, *args, **kwargs):
+        filepath = '/etc/bugyou/bugyou_plugins.cfg'
+        self.config = load_config(filepath)
 
     def initialize(self):
         self.init_retask_connection()

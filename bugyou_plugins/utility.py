@@ -1,7 +1,6 @@
 import ConfigParser
 
-def load_config():
-    filepath = '/etc/bugyou/bugyou_services.cfg'
+def load_config(filepath):
     if not os.path.exists(name):
         raise Exception('Please add a proper cofig file under /etc/bugyou')
 
