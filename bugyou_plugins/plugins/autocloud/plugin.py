@@ -6,6 +6,3 @@ class AutocloudPlugin(BasePlugin):
 
     def process(self, task):
         print task
-
-
-

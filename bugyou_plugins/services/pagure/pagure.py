@@ -1,9 +1,14 @@
+from bugyou_plugins.services import BaseService
+
+import libpagure
+
 class PagureService(BaseService):
     """ Service for Pagure """
-    def __init__(self, *args, **kwargs):
 
-        self.config = kwargs.get('config')
-        self.section = kwargs.get('section')
+    def __init__(self, *args, **kwargs):
+        """ Initiate the Pagure Service """
+
+        self.section = 'pagure'
 
         self.access_token = self.config.get(section, 'access_token')
         self.repo_name = self.config.get(section, 'repo_name')
@@ -13,7 +18,7 @@ class PagureService(BaseService):
 
     def get_issues(self):
         """ Return list of all the issues in the repo """
-        return self.project.list_issues()
+        self.issues = self.project.list_issues()
 
     def create_issue(self, *args, **kwargs):
         """ Creates an issue in the service repo """
