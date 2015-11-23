@@ -13,6 +13,7 @@ class BasePlugin(object):
     def __init__(self, *args, **kwargs):
         filepath = '/etc/bugyou/bugyou_plugins.cfg'
         self.config = load_config(filepath)
+        self.active_services = get_active_services(self)
 
     def initialize(self):
         self.init_retask_connection()
@@ -38,8 +39,14 @@ class BasePlugin(object):
 
     def load_services(self):
         """ Load the services for the plugin """
-        raise NotImplementedError()
+        services = self.config.get(self.plugin_name, 'services')
+        for service in services:
+            self.services.append(self.active_services[serivce].load())
 
     @abc.abstractmethod
     def process(self):
         """ Consumes the messages from retask """
+
+    @abc.abstractmethod
+    def do_pagure(self):
+        """ Override to do activity related to pagure """
