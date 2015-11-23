@@ -14,10 +14,12 @@ class BasePlugin(object):
         filepath = '/etc/bugyou/bugyou_plugins.cfg'
         self.config = load_config(filepath)
         self.active_services = get_active_services()
+        self.services = []
 
     def initialize(self):
         self.init_retask_connection()
         self.init_worker()
+        self.load_services()
 
     def init_retask_connection(self):
         """ Connect to the retask queue for the plugin """
@@ -39,9 +41,9 @@ class BasePlugin(object):
 
     def load_services(self):
         """ Load the services for the plugin """
-        services = self.config.get(self.plugin_name, 'services')
+        services = self.config.get(self.plugin_name, 'services').split(',')
         for service in services:
-            self.services.append(self.active_services[serivce].load())
+            self.services.append(self.active_services[service].load())
 
     @abc.abstractmethod
     def process(self):

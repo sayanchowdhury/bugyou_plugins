@@ -28,6 +28,9 @@ setup(
     entry_points={
         'bugyou.plugin': [
             "autocloud = bugyou_plugins.autocloud:AutocloudPlugin",
+        ],
+        'bugyou.services': [
+            "pagure = bugyou_plugins.services.pagure:PagureService",
         ]
     },
 )

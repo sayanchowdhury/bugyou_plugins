@@ -1,4 +1,4 @@
-from bugyou_plugins import load_config
+from bugyou_plugins.utility import load_config
 
 
 class BaseService(object):
