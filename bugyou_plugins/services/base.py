@@ -6,6 +6,6 @@ class BaseService(object):
         filepath = '/etc/bugyou/bugyou_services.cfg'
         self.config = load_config(filepath)
 
-    def get_issues_titles(self):
+    def _get_issues_titles(self):
         """ Returns a set of all the issues titles """
         return {issue['title'] for issue in self.issues}

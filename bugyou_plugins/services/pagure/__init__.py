@@ -5,13 +5,15 @@ import libpagure
 class PagureService(BaseService):
     """ Service for Pagure """
 
-    def __init__(self, *args, **kwargs):
-        """ Initiate the Pagure Service """
-        super(PagureService, self).__init__(*args, **kwargs)
+    SERVICE = 'pagure'
 
-        self.section = 'pagure'
-        self.access_token = self.config.get(section, 'access_token')
-        self.repo_name = self.config.get(section, 'repo_name')
+    def __init__(self, repo_name):
+        """ Initiate the Pagure Service """
+        super(PagureService, self).__init__()
+
+        self.name = self.SERVICE
+        self.repo_name = repo_name
+        self.access_token = self.config.get(self.repo_name, 'access_token')
 
         self.project = libpagure.Pagure(pagure_token=self.access_token,
                                         pagure_repository=self.repo_name)
@@ -20,15 +22,17 @@ class PagureService(BaseService):
         """ Return list of all the issues in the repo """
         self.issues = self.project.list_issues()
 
-    def create_issue(self, *args, **kwargs):
-        """ Creates an issue in the service repo """
-        title = kwargs.get('title')
-        content = kwargs.get('content')
+    def create_issue(self, title, content, private=False):
+        """ Creates an issue in the service repo
+        :args title: Title for the issue
+        :args content: Content for the issue
+        :args private: Mark issue as private/public
+        """
 
         params = {
             'title': title,
             'content': content,
-            'private': False,
+            'private': private,
         }
 
         try:
@@ -36,10 +40,10 @@ class PagureService(BaseService):
         except Exception as e:
             pass
 
-    def close_issue(self, *args, **kwargs):
-        """ Closes the issue in the service repo """
-        issue_id = kwargs.get('issue_id')
-
+    def close_issue(self, issue_id):
+        """ Closes the issue in the service repo
+        :args issue_id: id of the issue
+        """
         params = {
             'issue_id': issue_id,
             'new_status': 'Fixed',
@@ -50,18 +54,17 @@ class PagureService(BaseService):
         except Exception as e:
             pass
 
-    def update_issue(self, *args, **kwargs):
-        """ Updates the issue with a comment """
-
-        issue_id = kwargs.get('issue_id')
-        content = kwargs.get('content')
-
+    def update_issue(self, issue_id, content):
+        """ Updates the issue with a comment
+        :args issue_id: id of the issue
+        :args content: content of the comment in the issue
+        """
         params = {
             'issue_id': issue_id,
             'content': content,
         }
         try:
             self.project.update_issue(**params)
-        except:
+        except Exception as e:
             pass
 
