@@ -4,6 +4,7 @@ import multiprocessing
 
 from retask import Queue
 
+from bugyou_plugins.constants import CONFIG_FILEPATH
 from bugyou_plugins.utility import get_active_services, load_config
 
 
@@ -11,8 +12,7 @@ class BasePlugin(object):
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, *args, **kwargs):
-        filepath = '/etc/bugyou/bugyou_plugins.cfg'
-        self.config = load_config(filepath)
+        self.config = load_config(CONFIG_FILEPATH)
         self.active_services = get_active_services()
         self.services = []
 
