@@ -43,9 +43,6 @@ class BasePlugin(object):
     def load_services(self):
         """ Load the services for the plugin """
         services = self.config.get(self.plugin_name, 'services').split(',')
-        print 'Service', services
-        print 'Plugin Name', self.plugin_name
-        print 'Active Services', self.active_services
         for service in services:
             print 'Load', service
             self.services.append(self.active_services[service].load())

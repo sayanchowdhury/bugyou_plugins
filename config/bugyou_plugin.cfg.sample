@@ -1,2 +1,6 @@
 [autocloud]
 services = pagure
+topic = org.fedoraproject.prod.autocloud.image.failed
+
+[koji]
+services = github
