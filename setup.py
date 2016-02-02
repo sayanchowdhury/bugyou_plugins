@@ -26,8 +26,8 @@ setup(
         'Programming Language :: Python',
     ],
     entry_points={
-        'bugyou.plugin': [
-            "autocloud = bugyou_plugins.autocloud:AutocloudPlugin",
+        'bugyou.plugins': [
+            "autocloud = bugyou_plugins.plugins.autocloud.plugin:AutocloudPlugin",
         ],
         'bugyou.services': [
             "pagure = bugyou_plugins.services.pagure:PagureService",
