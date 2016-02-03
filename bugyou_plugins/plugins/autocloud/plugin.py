@@ -8,7 +8,10 @@ class AutocloudPlugin(BasePlugin):
 
     def process(self, msg):
         for service in self.services:
+            print msg
+            """
             getattr(self, 'do_%s'%service.SERVICE)(msg)
+            """
 
     def do_pagure(self, msg):
         pagure_obj = PagureService(repo_name=self.plugin_name)
