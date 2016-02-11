@@ -23,7 +23,6 @@ class AutocloudPlugin(BasePlugin):
 
         output_url_tmpl = "https://apps.fedoraproject.org/autocloud/jobs/{job_id}/output"
 
-        """
         issues = pagure_obj.get_issues()
         issue_titles = self._get_issues_titles(issues)
 
@@ -62,4 +61,3 @@ class AutocloudPlugin(BasePlugin):
                 issue_id = matched_issue['id']
 
                 pagure_obj.close_issue(issue_id=issue_id)
-        """
