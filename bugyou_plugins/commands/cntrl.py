@@ -67,6 +67,6 @@ class PluginController(object):
                 plugin_obj.initialize()
 
 
-if __name__ == '__main__':
+def cntrl():
     u = PluginController()
     u.notifier()
