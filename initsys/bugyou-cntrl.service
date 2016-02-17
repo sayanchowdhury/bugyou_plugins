@@ -1,0 +1,12 @@
+[Unit]
+Description=Generic bugyou controller
+After=network.target
+Documentation=http://bugyou.readthedocs.org/
+
+[Service]
+ExecStart=/usr/bin/bugyou-cntrl
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
