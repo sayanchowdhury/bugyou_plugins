@@ -27,7 +27,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            "bugyou-ctrl=bugyou_plugins.commands.cntrl:cntrl",
+            "bugyou-cntrl=bugyou_plugins.commands.cntrl:cntrl",
         ],
         'bugyou.plugins': [
             "autocloud = bugyou_plugins.plugins.autocloud.plugin:AutocloudPlugin",
