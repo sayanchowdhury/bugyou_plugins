@@ -1,3 +1,5 @@
 include README.md
 include LICENSE
+include config/bugyou_plugins.cfg
+include config/bugyou_services.cfg
 include initsys/bugyou-cntrl.service

@@ -1,7 +1,0 @@
-[autocloud_pagure]
-repo_name = atomic-images
-access_token = ACCESS_TOKEN_HERE
-
-[koji_github]
-repo_name = xyz
-access_token = xyz
