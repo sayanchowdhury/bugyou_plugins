@@ -16,7 +16,8 @@ setup(
     url='https://github.com/sayanchowdhury/bugyou_plugins/',
     license='GPLv3',
     install_requires=requires,
-    packages=['bugyou_plugins'],
+    packages=['bugyou_plugins', 'bugyou_plugins.commands',
+              'bugyou_plugins.plugins', 'bugyou_plugins.services'],
     include_package_data=True,
     zip_safe=False,
     classifiers=[
