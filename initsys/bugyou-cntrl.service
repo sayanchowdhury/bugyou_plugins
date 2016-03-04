@@ -1,6 +1,7 @@
 [Unit]
 Description=Generic bugyou controller
-After=network.target
+After=network.target redis.service fedmsg-hub.service
+Requires=network.target redis.service fedmsg-hub.service
 Documentation=http://bugyou.readthedocs.org/
 
 [Service]
