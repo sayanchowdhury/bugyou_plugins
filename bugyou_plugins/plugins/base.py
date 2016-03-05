@@ -21,7 +21,7 @@ import abc
 import copy
 import multiprocessing
 
-from retask import Queue
+from retask.queue import Queue
 
 from bugyou_plugins.constants import CONFIG_FILEPATH
 from bugyou_plugins.utility import get_active_services, load_config

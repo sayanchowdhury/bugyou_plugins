@@ -20,8 +20,8 @@
 import pkg_resources
 import ConfigParser
 
-from retask import Task
-from retask import Queue
+from retask.task import Task
+from retask.queue import Queue
 
 from bugyou_plugins.constants import CONFIG_FILEPATH
 from bugyou_plugins.utility import load_config
