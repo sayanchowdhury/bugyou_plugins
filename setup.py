@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 requires = []
 
 setup(
     name='bugyou_plugins',
-    version='0.1.1',
+    version='0.1.2',
     description='Plugins for bugyou, an automatic bug reporting tool',
     author='Sayan Chowdhury',
     author_email='sayanchowdhury@fedoraproject.org',
     url='https://github.com/sayanchowdhury/bugyou_plugins/',
     license='GPLv3',
     install_requires=requires,
-    packages=['bugyou_plugins', 'bugyou_plugins.commands',
-              'bugyou_plugins.plugins', 'bugyou_plugins.services'],
+    packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
     classifiers=[
