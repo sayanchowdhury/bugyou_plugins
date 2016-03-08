@@ -23,7 +23,7 @@ import ConfigParser
 from retask.task import Task
 from retask.queue import Queue
 
-from bugyou_plugins.constants import CONFIG_FILEPATH
+from bugyou_plugins.constants import PLUGINS_CONFIG_FILEPATH
 from bugyou_plugins.utility import load_config
 
 
@@ -31,7 +31,7 @@ class PluginController(object):
     def __init__(self):
 
         # Get all the plugins from the config file
-        self.config = load_config(CONFIG_FILEPATH)
+        self.config = load_config(PLUGINS_CONFIG_FILEPATH)
         self.plugins = self.config.sections()
 
         self.active_plugins = {}
@@ -72,3 +72,6 @@ class PluginController(object):
 def cntrl():
     u = PluginController()
     u.notifier()
+
+if __name__ == '__main__':
+    cntrl()
