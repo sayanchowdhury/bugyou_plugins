@@ -23,7 +23,7 @@ import multiprocessing
 
 from retask.queue import Queue
 
-from bugyou_plugins.constants import CONFIG_FILEPATH
+from bugyou_plugins.constants import PLUGINS_CONFIG_FILEPATH
 from bugyou_plugins.utility import get_active_services, load_config
 
 
@@ -31,7 +31,7 @@ class BasePlugin(object):
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, *args, **kwargs):
-        self.config = load_config(CONFIG_FILEPATH)
+        self.config = load_config(PLUGINS_CONFIG_FILEPATH)
         self.active_services = get_active_services()
         self.services = []
 
@@ -52,7 +52,8 @@ class BasePlugin(object):
     def consume(self):
         while True:
             task = self.queue.wait()
-            self.process(task)
+            if task:
+                self.process(task.data['msg'])
 
     def init_worker(self):
         """ Create a process and start consuming the messages """
