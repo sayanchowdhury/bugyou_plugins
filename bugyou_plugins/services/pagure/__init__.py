@@ -26,20 +26,25 @@ class PagureService(BaseService):
 
     SERVICE = 'pagure'
 
-    def __init__(self, repo_name):
+    def __init__(self, plugin_name):
         """ Initiate the Pagure Service """
         super(PagureService, self).__init__()
 
         self.name = self.SERVICE
-        self.repo_name = repo_name
-        self.access_token = self.config.get(self.repo_name, 'access_token')
+        self.repo_name = self.config.get("{}_{}".format(plugin_name,
+                                                           self.SERVICE),
+                                            'repo_name')
+        self.access_token = self.config.get("{}_{}".format(plugin_name,
+                                                           self.SERVICE),
+                                            'access_token')
 
         self.project = libpagure.Pagure(pagure_token=self.access_token,
-                                        pagure_repository=self.repo_name)
+                                        pagure_repository=self.repo_name,
+                                        instance_url="https://stg.pagure.io")
 
     def get_issues(self):
         """ Return list of all the issues in the repo """
-        self.issues = self.project.list_issues()
+        return self.project.list_issues()
 
     def create_issue(self, title, content, private=False):
         """ Creates an issue in the service repo
@@ -69,7 +74,7 @@ class PagureService(BaseService):
         }
 
         try:
-            self.project.comment_issue(**params)
+            self.project.change_issue_status(**params)
         except Exception as e:
             pass
 
@@ -80,10 +85,10 @@ class PagureService(BaseService):
         """
         params = {
             'issue_id': issue_id,
-            'content': content,
+            'body': content,
         }
         try:
-            self.project.update_issue(**params)
+            self.project.comment_issue(**params)
         except Exception as e:
             pass
 

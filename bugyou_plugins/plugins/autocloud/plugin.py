@@ -30,8 +30,13 @@ class AutocloudPlugin(BasePlugin):
         for service in self.services:
             getattr(self, 'do_%s'%service.SERVICE)(msg)
 
+    def _get_issues_title(self, issues):
+        """ Returns a set of all the issue title
+        """
+        return {issue['title'] for issue in issues}
+
     def do_pagure(self, msg):
-        pagure_obj = PagureService(repo_name=self.plugin_name)
+        pagure_obj = PagureService(plugin_name=self.plugin_name)
 
         issue_content_templ = """
         The image {image_name} for the release - {release} failed.
@@ -39,9 +44,10 @@ class AutocloudPlugin(BasePlugin):
         """
 
         output_url_tmpl = "https://apps.fedoraproject.org/autocloud/jobs/{job_id}/output"
+        lookup_key_tmpl = "{image_name}-{release}"
 
         issues = pagure_obj.get_issues()
-        issue_titles = self._get_issues_titles(issues)
+        issue_titles = self._get_issues_title(issues)
 
         msg_info = msg['body']['msg']
         topic = msg['body']['topic']
@@ -49,24 +55,23 @@ class AutocloudPlugin(BasePlugin):
         release = msg_info['release']
         job_id = msg_info['job_id']
 
-        lookup_key = pagure_obj.lookup_key_tmpl.format(image_name=image_name,
+        lookup_key = lookup_key_tmpl.format(image_name=image_name,
                                                  release=release)
 
         lookup_key_exists = lookup_key in issue_titles
 
         if 'failed' in topic:
-            output_url = output_url_tmpl.format(job_id=job)
-            content = issue_content_template.format(image_name=image_name,
-                                                    release=release,
-                                                    output_url=output_url)
+            output_url = output_url_tmpl.format(job_id=job_id)
+            content = issue_content_templ.format(image_name=image_name,
+                                                release=release,
+                                                output_url=output_url)
 
             if lookup_key_exists:
                 matched_issue = (issue for issue in issues
-                                 if issue['title'] == loopkup_key).next()
+                                 if issue['title'] == lookup_key).next()
                 issue_id = matched_issue['id']
-
-                pagure_obj.update_issue_comment(issue_id=issue_id,
-                                                content=content)
+                pagure_obj.update_issue(issue_id=issue_id,
+                                        content=content)
 
             elif 'failed' in topic:
                 pagure_obj.create_issue(title=lookup_key, content=content)
