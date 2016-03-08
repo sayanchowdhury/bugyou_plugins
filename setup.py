@@ -6,7 +6,7 @@ requires = []
 
 setup(
     name='bugyou_plugins',
-    version='0.1.2',
+    version='0.1.3',
     description='Plugins for bugyou, an automatic bug reporting tool',
     author='Sayan Chowdhury',
     author_email='sayanchowdhury@fedoraproject.org',
