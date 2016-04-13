@@ -25,12 +25,16 @@ from retask.queue import Queue
 
 from bugyou_plugins.constants import PLUGINS_CONFIG_FILEPATH
 from bugyou_plugins.utility import load_config
+from bugyou_plugins.commands import BaseCommand
 
+import logging
+log = logging.getLogger("bugyou")
 
-class PluginController(object):
-    def __init__(self):
-
-        # Get all the plugins from the config file
+class PluginController(BaseCommand):
+    def __init__(self, *args, **kwargs):
+        """ Create a list of the Plugins registered in the entry points
+        """
+        super(PluginController, self).__init__(*args, **kwargs)
         self.config = load_config(PLUGINS_CONFIG_FILEPATH)
         self.plugins = self.config.sections()
 
@@ -39,20 +43,21 @@ class PluginController(object):
             plugin_object = entry_point.load()
             plugin_name = entry_point.name
             self.active_plugins[plugin_name] = plugin_object
+        log.info("All Active Plugins Loaded")
 
     def notifier(self):
-        # Connect to the instruction queue and notify bugyou to create a queue
-        # for the plugin and start pushing the fedmsg messags.
-
+        """ Connect to the instruction queue and notify bugyou to create a queue
+        for the plugin and start pushing the fedmsg messags.
+        """
         queue = Queue('instruction')
         queue.connect()
         for plugin in self.plugins:
             try:
                 topic = self.config.get(plugin, 'topic')
             except ConfigParser.NoOptionError:
-                print 'topic does not exists'
+                log.error("Config does not exists")
             if topic is None:
-                print 'Topic does not exists'
+                log.info("Config does not exists")
                 continue
 
             payload = {

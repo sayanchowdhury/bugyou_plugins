@@ -20,6 +20,8 @@
 from bugyou_plugins.plugins.base import BasePlugin
 from bugyou_plugins.services.pagure import PagureService
 
+import logging
+log = logging.getLogger("bugyou")
 
 class AutocloudPlugin(BasePlugin):
     def __init__(self, *args, **kwargs):
@@ -28,6 +30,7 @@ class AutocloudPlugin(BasePlugin):
 
     def process(self, msg):
         for service in self.services:
+            log.info("Executing Service %s" % service.SERVICE)
             getattr(self, 'do_%s'%service.SERVICE)(msg)
 
     def _get_issues_title(self, issues):
@@ -36,6 +39,7 @@ class AutocloudPlugin(BasePlugin):
         return {issue['title'] for issue in issues}
 
     def do_pagure(self, msg):
+        log.info("Received message %s" % msg['body']['msg_id'])
         pagure_obj = PagureService(plugin_name=self.plugin_name)
 
         issue_content_templ = """
@@ -70,10 +74,12 @@ class AutocloudPlugin(BasePlugin):
                 matched_issue = (issue for issue in issues
                                  if issue['title'] == lookup_key).next()
                 issue_id = matched_issue['id']
+                log.info("Updating issue %s:%s" % (self.plugin_name, issue_id))
                 pagure_obj.update_issue(issue_id=issue_id,
                                         content=content)
 
             elif 'failed' in topic:
+                log.info("Creating issue %s" % self.plugin_name)
                 pagure_obj.create_issue(title=lookup_key, content=content)
 
         if 'success' in topic:
@@ -82,4 +88,5 @@ class AutocloudPlugin(BasePlugin):
                                  if issue['title'] == lookup_key).next()
                 issue_id = matched_issue['id']
 
+                log.info("Closing issue %s:%s" % (self.plugin_name, issue_id))
                 pagure_obj.close_issue(issue_id=issue_id)

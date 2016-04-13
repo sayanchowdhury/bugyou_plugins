@@ -26,6 +26,8 @@ from retask.queue import Queue
 from bugyou_plugins.constants import PLUGINS_CONFIG_FILEPATH
 from bugyou_plugins.utility import get_active_services, load_config
 
+import logging
+log = logging.getLogger("bugyou")
 
 class BasePlugin(object):
     __metaclass__ = abc.ABCMeta
@@ -44,15 +46,16 @@ class BasePlugin(object):
         """ Connect to the retask queue for the plugin """
         self.queue = Queue(self.plugin_name)
         conn = self.queue.connect()
-        print 'Init retask connection'
+        log.info("Initializing redis conection: %s" % self.plugin_name)
         if not conn:
-            print 'Could not connect to %s queue' % self.plugin_name
+            log.error("Could not connect to %s queue" % self.plugin_name)
             return False
 
     def consume(self):
         while True:
             task = self.queue.wait()
             if task:
+                log.debug("Processing Message: %s" % task.data['msg']['body']['msg_id'])
                 self.process(task.data['msg'])
 
     def init_worker(self):
@@ -63,10 +66,10 @@ class BasePlugin(object):
     def load_services(self):
         """ Load the services for the plugin """
         services = self.config.get(self.plugin_name, 'services').split(',')
+        log.info("Start loading services")
         for service in services:
-            print 'Load', service
             self.services.append(self.active_services[service].load())
-            print self.services
+        log.info("Complete loading services %s" % self.services)
 
     @abc.abstractmethod
     def process(self):
