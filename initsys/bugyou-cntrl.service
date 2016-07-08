@@ -7,7 +7,7 @@ Documentation=http://bugyou.readthedocs.org/
 [Service]
 ExecStart=/usr/bin/bugyou-cntrl
 Type=simple
-Restart=on-failure
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

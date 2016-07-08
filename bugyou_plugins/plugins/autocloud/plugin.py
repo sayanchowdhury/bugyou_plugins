@@ -43,7 +43,7 @@ class AutocloudPlugin(BasePlugin):
         pagure_obj = PagureService(plugin_name=self.plugin_name)
 
         issue_content_templ = """
-        The image {image_name} for the release - {release} failed.
+        The image {image_name}({compose_id}) for the release - {release} failed.
         The output can be seen here - {output_url}
         """
 
@@ -58,6 +58,7 @@ class AutocloudPlugin(BasePlugin):
         image_name = msg_info['image_name']
         release = msg_info['release']
         job_id = msg_info['job_id']
+        compose_id = msg_info['compose_id']
 
         lookup_key = lookup_key_tmpl.format(image_name=image_name,
                                                  release=release)
@@ -67,8 +68,9 @@ class AutocloudPlugin(BasePlugin):
         if 'failed' in topic:
             output_url = output_url_tmpl.format(job_id=job_id)
             content = issue_content_templ.format(image_name=image_name,
-                                                release=release,
-                                                output_url=output_url)
+                                                 compose_id=compose_id,
+                                                 release=release,
+                                                 output_url=output_url)
 
             if lookup_key_exists:
                 matched_issue = (issue for issue in issues
