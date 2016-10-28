@@ -39,8 +39,7 @@ class PagureService(BaseService):
                                             'access_token')
 
         self.project = libpagure.Pagure(pagure_token=self.access_token,
-                                        pagure_repository=self.repo_name,
-                                        instance_url="https://stg.pagure.io")
+                                        pagure_repository=self.repo_name)
 
     def get_issues(self):
         """ Return list of all the issues in the repo """

@@ -17,6 +17,8 @@
 # Authors: Sayan Chowdhury <sayanchowdhury@fedoraproject.org>
 #
 
+import re
+
 from bugyou_plugins.plugins.base import BasePlugin
 from bugyou_plugins.services.pagure import PagureService
 
@@ -60,8 +62,12 @@ class AutocloudPlugin(BasePlugin):
         job_id = msg_info['job_id']
         compose_id = msg_info['compose_id']
 
-        lookup_key = lookup_key_tmpl.format(image_name=image_name,
-                                                 release=release)
+        # Generalize image_name here. The image_name contains the compose date
+        # and the respin. The regex is to remove those.
+        pattern = '[-]\d{8}(.n)?.\d'
+        formatted_image_name = re.sub(pattern, '', image_name)
+        lookup_key = lookup_key_tmpl.format(image_name=formatted_image_name,
+                                            release=release)
 
         lookup_key_exists = lookup_key in issue_titles
 
